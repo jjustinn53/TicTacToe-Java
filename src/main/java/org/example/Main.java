@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
@@ -50,12 +51,29 @@ public class Main {
     private static void play(char[][] board) {
         printBoard(board);
 
+
         boolean player1 = true;
         boolean win = false;
 
         Scanner scanner = new Scanner(System.in);
         int player;
         char xO;
+        boolean CPU = false;
+
+        while(true) {
+            System.out.println("CPU or Player?: ");
+            String input = scanner.nextLine();
+
+            if(!input.equalsIgnoreCase("CPU")
+                    || !input.equalsIgnoreCase("player")) {
+                System.out.println("Invalid input, Try again.");
+            }
+
+            if(input.equalsIgnoreCase("CPU")) {
+                CPU = true;
+            }
+            break;
+        }
 
         do{
             if(player1) {
@@ -67,15 +85,23 @@ public class Main {
                 xO = 'O';
                 player1 = true;
             }
+            Random random = new Random();
 
-            System.out.printf("Player %d's turn, Select a row (1-3): %n", player);
-            int row = Integer.valueOf(scanner.nextLine()) - 1;
-            System.out.printf("Player %d's turn, Select a column (1-3): %n", player);
-            int col = Integer.valueOf(scanner.nextLine()) - 1;
+            int row = 0;
+            int col = 0;
+            if(!CPU || player == 1) {
+                System.out.printf("Player %d's turn, Select a row (1-3): %n", player);
+                row = Integer.valueOf(scanner.nextLine()) - 1;
+                System.out.printf("Player %d's turn, Select a column (1-3): %n", player);
+                col = Integer.valueOf(scanner.nextLine()) - 1;
+            } else if(player == 2 && CPU){
+                row = random.nextInt(3);
+                col = random.nextInt(3);
+            }
 
             if(board[row][col] == ' ') {
                 board[row][col] = xO;
-            } else {
+            } else if(!CPU){
                 System.out.println("Spot taken, Please try again.");
                 continue;
             }
