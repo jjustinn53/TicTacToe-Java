@@ -42,6 +42,7 @@ public class Main {
             }
             System.out.println();
         }
+        System.out.println();
     }
 
     /**
@@ -56,31 +57,35 @@ public class Main {
         boolean win = false;
 
         Scanner scanner = new Scanner(System.in);
-        int player;
-        char xO;
+        int player = 1;
+        char xO = 'X';
         boolean CPU = false;
+        boolean invalid = false;
+        int moves = 0;
 
         while(true) {
             System.out.println("CPU or Player?: ");
             String input = scanner.nextLine();
 
-            if(!input.equalsIgnoreCase("CPU")
-                    || !input.equalsIgnoreCase("player")) {
+            if(!input.equalsIgnoreCase("CPU") && !input.equalsIgnoreCase("Player")) {
                 System.out.println("Invalid input, Try again.");
             }
 
             if(input.equalsIgnoreCase("CPU")) {
                 CPU = true;
+                break;
+            } else if(input.equalsIgnoreCase("player")) {
+                CPU = false;
+                break;
             }
-            break;
         }
 
         do{
-            if(player1) {
+            if(player1 && !invalid) {
                 player = 1;
                 xO = 'X';
                 player1 = false;
-            } else {
+            } else if(!player1 && !invalid) {
                 player = 2;
                 xO = 'O';
                 player1 = true;
@@ -89,11 +94,20 @@ public class Main {
 
             int row = 0;
             int col = 0;
+
             if(!CPU || player == 1) {
-                System.out.printf("Player %d's turn, Select a row (1-3): %n", player);
-                row = Integer.valueOf(scanner.nextLine()) - 1;
-                System.out.printf("Player %d's turn, Select a column (1-3): %n", player);
-                col = Integer.valueOf(scanner.nextLine()) - 1;
+                while(true) {
+                    System.out.printf("Player %d's turn, Select a row (1-3): %n", player);
+                    row = Integer.valueOf(scanner.nextLine()) - 1;
+                    System.out.printf("Player %d's turn, Select a column (1-3): %n", player);
+                    col = Integer.valueOf(scanner.nextLine()) - 1;
+
+                    if(row < 0 || row > board.length || col < 0 || col > board[row].length) {
+                        System.out.println("Invalid input, Try again.\n");
+                    } else {
+                        break;
+                    }
+                }
             } else if(player == 2 && CPU){
                 row = random.nextInt(3);
                 col = random.nextInt(3);
@@ -101,15 +115,29 @@ public class Main {
 
             if(board[row][col] == ' ') {
                 board[row][col] = xO;
+                invalid = false;
+                moves++;
             } else if(!CPU){
                 System.out.println("Spot taken, Please try again.");
+                invalid = true;
+                continue;
+            } else {
+                invalid = true;
                 continue;
             }
             win = winCheck(board);
             printBoard(board);
+
+            if(moves == 9 && !win) {
+                break;
+            }
         } while (!win);
 
-        System.out.println("Player " + player + " won!");
+        if(win) {
+            System.out.println("Player " + player + " won!");
+        } else {
+            System.out.println("Tie!");
+        }
     }
 
     /**
@@ -137,6 +165,7 @@ public class Main {
          || board[0][2] != ' ' && board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
              win = true;
          }
+
          return win;
     }
 }
