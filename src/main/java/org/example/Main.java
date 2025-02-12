@@ -147,25 +147,24 @@ public class Main {
      * @return win
      */
     public static boolean winCheck(char[][] board) {
-        boolean win = false;
 
          for(int row = 0; row < board.length; row++) {
              if(board[row][0] != ' ' && board[row][0] == board[row][1] && board[row][1] == board[row][2]) {
-                 win = true;
+                 return true;
              }
          }
 
          for(int col = 0; col < board[0].length; col++) {
             if (board[0][col] != ' ' && board[0][col] == board[1][col] && board[1][col] == board[2][col]) {
-                win = true;
+                return true;
             }
         }
 
          if(board[0][0] != ' ' && board[0][0] == board[1][1] && board[1][1] == board[2][2]
          || board[0][2] != ' ' && board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
-             win = true;
+             return true;
          }
 
-         return win;
+         return false;
     }
 }
