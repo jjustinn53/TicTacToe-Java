@@ -122,6 +122,7 @@ public class Main {
                 invalid = true;
                 continue;
             } else {
+                System.out.println("Spot taken, Please try again.");
                 invalid = true;
                 continue;
             }
